@@ -1,10 +1,79 @@
+// Library
 import Head from "next/head";
+import { useReducer } from "react";
+// Components
 import BtnPrimary from "../components/BtnPrimary";
 import BtnPrimaryWide from "../components/BtnPrimaryWide";
 import BtnWarning from "../components/BtnWarning";
 import BtnWarningWide from "../components/BtnWarningWide";
+import BtnPrimaryDigit from "../components/BtnPrimaryDigit";
+import BtnPrimaryWideDigit from "../components/BtnPrimaryWideDigit";
+// Utils
+import { formatOperand } from "../utils/formatOperand";
+import { ACTIONS } from "../utils/actions";
+
+function reducer(state, { type, payload }) {
+  switch (type) {
+    case ACTIONS.ADD_DIGIT:
+      return {
+        ...state,
+        currentOperand: `${state.currentOperand || ""}${payload.digit}`,
+      };
+    case "choose_operation":
+      return state;
+    case "clear":
+      return state;
+    case "delete_digit":
+      return state;
+    case "evaluate":
+      return state;
+    default:
+      return state;
+  }
+}
+
+function handleKeyDownInput(e, dispatch) {
+  switch (e.key) {
+    case "1":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "1" } });
+      break;
+    case "2":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "2" } });
+      break;
+    case "3":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "3" } });
+      break;
+    case "4":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "4" } });
+      break;
+    case "5":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "5" } });
+      break;
+    case "6":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "6" } });
+      break;
+    case "7":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "7" } });
+      break;
+    case "8":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "8" } });
+      break;
+    case "9":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "9" } });
+      break;
+    case "0":
+      dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: "0" } });
+      break;
+  }
+  // dispatch({type: ACTIONS.ADD_DIGIT, payload: {digit}})
+}
 
 export default function Home() {
+  const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
+    reducer,
+    {}
+  );
+
   return (
     <div>
       <Head>
@@ -30,34 +99,37 @@ export default function Home() {
             </div>
           </div>
           {/* Display */}
-          <div className="rounded-md pt-[40px] pb-[40px] pr-[32px] pl-[32px] bg-indigo-800 mb-[23px]">
-            <p className="text-right text-white font-extrabold text-4xl">
-              399,981
-            </p>
+          <div className="rounded-md bg-indigo-800 mb-[23px] py-[40px] px-[32px]">
+            <input
+              type={"text"}
+              className="text-right text-white font-extrabold text-4xl bg-transparent p-0 m-0 w-full outline-none"
+              value={formatOperand(currentOperand)}
+              onKeyDown={(e) => handleKeyDownInput(e, dispatch)}
+            />
           </div>
           {/* Buttons */}
           <div className="rounded-md p-[32px] bg-indigo-700 mb-[100px]">
             <div className="grid grid-cols-4 gap-4 mb-[24px]">
-              <BtnPrimary value={7} />
-              <BtnPrimary value={8} />
-              <BtnPrimary value={9} />
+              <BtnPrimaryDigit digit="7" dispatch={dispatch} />
+              <BtnPrimaryDigit digit="8" dispatch={dispatch} />
+              <BtnPrimaryDigit digit="9" dispatch={dispatch} />
               <BtnWarning value={"DEL"} />
             </div>
             <div className="grid grid-cols-4 gap-4 mb-[24px]">
-              <BtnPrimary value={4} />
-              <BtnPrimary value={5} />
-              <BtnPrimary value={6} />
+              <BtnPrimaryDigit digit="4" dispatch={dispatch} />
+              <BtnPrimaryDigit digit="5" dispatch={dispatch} />
+              <BtnPrimaryDigit digit="6" dispatch={dispatch} />
               <BtnPrimary value={"+"} />
             </div>
             <div className="grid grid-cols-4 gap-4 mb-[24px]">
-              <BtnPrimary value={1} />
-              <BtnPrimary value={2} />
-              <BtnPrimary value={3} />
+              <BtnPrimaryDigit digit="1" dispatch={dispatch} />
+              <BtnPrimaryDigit digit="2" dispatch={dispatch} />
+              <BtnPrimaryDigit digit="3" dispatch={dispatch} />
               <BtnPrimary value={"-"} />
             </div>
             <div className="grid grid-cols-4 gap-4 mb-[24px]">
               <BtnPrimary value={"."} />
-              <BtnPrimary value={0} />
+              <BtnPrimaryDigit digit="0" dispatch={dispatch} />
               <BtnPrimary value={"/"} />
               <BtnPrimary value={"x"} />
             </div>
